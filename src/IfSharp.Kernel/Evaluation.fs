@@ -122,11 +122,12 @@ module Evaluation =
             match runtime with
             | Config.Runtime.NetCore ->
                 let corelib = "System.Private.CoreLib.dll"
-                let runtime =
+                let corelib_path =
                     options.OtherOptions
                     |> Array.find (fun v -> v.Contains(corelib))
-                    |> (fun v -> v.Replace(corelib, "System.Runtime.dll"))
-                let other = options.OtherOptions |> Array.append [|runtime|]
+                let runtime = corelib_path.Replace(corelib, "System.Runtime.dll")
+                let netstandard = corelib_path.Replace(corelib, "netstandard.dll")
+                let other = options.OtherOptions |> Array.append [| netstandard; runtime |]
                 { options with OtherOptions = other }
             | Config.Runtime.NetFramework -> options
 
